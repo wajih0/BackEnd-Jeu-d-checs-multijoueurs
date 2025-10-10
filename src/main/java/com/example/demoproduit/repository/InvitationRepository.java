@@ -1,4 +1,7 @@
 package com.example.demoproduit.repository;
 
-public interface InvitationRepository {
+import com.example.demoproduit.entities.Invitation;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface InvitationRepository extends JpaRepository<Invitation, Long> {
 }

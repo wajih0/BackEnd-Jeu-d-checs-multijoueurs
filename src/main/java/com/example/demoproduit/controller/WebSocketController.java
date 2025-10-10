@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demoproduit.controller;
 
 public class WebSocketController {
 }

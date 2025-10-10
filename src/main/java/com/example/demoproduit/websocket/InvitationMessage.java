@@ -1,4 +1,4 @@
-package com.example.demo.websocket;
+package com.example.demoproduit.websocket;
 
 public class InvitationMessage {
 }
