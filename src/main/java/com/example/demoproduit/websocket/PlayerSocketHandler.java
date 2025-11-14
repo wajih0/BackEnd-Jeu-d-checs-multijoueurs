@@ -39,6 +39,7 @@ public class PlayerSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    // Gérer les messages entrants (type , invite , from , to)
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         Map<String, Object> payload = mapper.readValue(message.getPayload(), Map.class);
@@ -51,6 +52,7 @@ public class PlayerSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    // envoyer un message d’invitation d’un utilisateur (from) vers un autre (to) en temps réel.
     private void handleInvite(Map<String, Object> payload) throws Exception {
         String from = (String) payload.get("from");
         String to = (String) payload.get("to");
@@ -64,11 +66,12 @@ public class PlayerSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    // gérer la réponse à une invitation (acceptée ou refusée)
     private void handleInviteResponse(Map<String, Object> payload) throws Exception {
         String from = (String) payload.get("from");
         String to = (String) payload.get("to");
         boolean accepted = (Boolean) payload.get("accepted");
-
+        // pour garder la session connectée de user
         WebSocketSession toSession = sessions.get(to);
 
         if (accepted) {
@@ -96,6 +99,7 @@ public class PlayerSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    // gérer les mouvements de jeu
     private void handleMove(Map<String, Object> payload) throws Exception {
         Long gameId = ((Number) payload.get("gameId")).longValue();
         String fromCell = (String) payload.get("fromCell");
@@ -127,6 +131,7 @@ public class PlayerSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    // Méthode utilitaire pour envoyer un message aux deux joueurs
     private void sendToBoth(String p1, String p2, Map<String, Object> msg) throws Exception {
         String json = mapper.writeValueAsString(msg);
         for (String p : new String[]{p1, p2}) {
@@ -137,6 +142,7 @@ public class PlayerSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    // Gérer la déconnexion
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String username = getUsername(session);
@@ -147,6 +153,8 @@ public class PlayerSocketHandler extends TextWebSocketHandler {
         }
     }
 
+
+    // Méthode pour diffuser la liste des joueurs connectés à tous les clients
     private void broadcastPlayers() throws Exception {
         var msg = mapper.writeValueAsString(Map.of("type", "players", "players", sessions.keySet()));
         for (WebSocketSession s : sessions.values()) {

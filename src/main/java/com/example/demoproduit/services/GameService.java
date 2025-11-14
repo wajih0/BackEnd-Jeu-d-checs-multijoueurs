@@ -7,7 +7,6 @@ import com.example.demoproduit.repository.MoveRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +20,7 @@ public class GameService {
         this.moveRepository = moveRepository;
     }
 
-    // 🔹 Vérifie si les deux joueurs ont accepté et démarre la partie
+    //  Vérifie si les deux joueurs ont accepté et démarre la partie
     public Game startGame(Game game) {
         if (game.getPlayer1() != null && game.getPlayer2() != null) {
             game.setStatus("ONGOING");
@@ -30,7 +29,7 @@ public class GameService {
         throw new RuntimeException("Both players must be set to start the game");
     }
 
-    // 🔹 Initialisation du plateau 8x8 (vide)
+    //  Initialisation du plateau 8x8 (vide)
     public String[][] initializeBoard() {
         String[][] board = new String[8][8];
         for (int i = 0; i < 8; i++)
@@ -39,13 +38,13 @@ public class GameService {
         return board;
     }
 
-    // 🔹 Sauvegarde un coup
+    //  Sauvegarde un coup
     public Move playMove(Move move) {
         move.setPlayedAt(LocalDateTime.now());
         return moveRepository.save(move);
     }
 
-    // 🔹 Récupère tous les coups d’une partie pour reprise
+    //  Récupère tous les coups d’une partie pour reprise
     public List<Move> resumeGame(Long gameId) {
         return moveRepository.findByGameId(gameId);
     }
